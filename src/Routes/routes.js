@@ -2,7 +2,7 @@ import Login from "../views/LoginScreen";
 import Register from "../views/RegisterScreen";
 
 import LayoutPrivate from "../layouts/layout.private";
-import HomePrivate from "../views/private/HomeScreen"; 
+import HomePrivate from "../views/private/HomeScreen";
 import MainAccountScreen from "../views/private/Accounts/MainAccountScreen";
 import MainProductsScreen from "../views/private/Products/MainProductsScreen";
 import FormProduct from "../views/private/Products/FormProductScreen";
@@ -10,6 +10,8 @@ import DetailProduct from "../views/private/Products/DetailProductScreen";
 import CartItemScreen from "../views/private/ManageStock/CartItemScreen";
 import MainManageStock from "../views/private/ManageStock/MainManageStock";
 import DetailManageStock from "../views/private/ManageStock/DetailManageStock";
+import DetailAccountScreen from "../views/private/Accounts/DetailAccountScreen";
+import MainOrderScreen from "../views/private/Orders/MainOrderScreen";
 
 import Page401 from "../views/401";
 
@@ -92,6 +94,18 @@ export const RouteList = [
         Path: "/detailmanagestock/:id",
         Component: DetailManageStock,
       },
+      {
+        TitleTH: "รายละเอียดผู้ใช้งาน",
+        NameTH: "ข้อมูลรายละเอียดผู้ใช้งาน",
+        Path: "/detailaccount/:id",
+        Component: DetailAccountScreen,
+      },
+      {
+        TitleTH: "คำสั่งซื้อ",
+        NameTH: "ข้อมูลคำสั่งซื้อของลูกค้า",
+        Path: "/mainorders",
+        Component: MainOrderScreen,
+      },
     ],
-  }, 
+  },
 ];

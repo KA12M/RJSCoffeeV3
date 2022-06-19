@@ -18,7 +18,6 @@ const FormProductScreen = (props) => {
 
   const [data, setData] = useState();
   const [category, setCategory] = useState();
-  const [upfileList, setUpfileList] = useState();
 
   useEffect(() => {
     fetchCategory();
@@ -51,8 +50,7 @@ const FormProductScreen = (props) => {
 
   const onCreateProduct = async (values, token) => {
     var response = await productService.CreateProduct(
-      values,
-      upfileList,
+      values, 
       token
     );
     DialogAlert(response);
@@ -60,8 +58,7 @@ const FormProductScreen = (props) => {
 
   const onUpdateProduct = async (values, token) => {
     var response = await productService.UpdateProduct(
-      { ...values, id },
-      upfileList,
+      { ...values, id }, 
       token
     );
     DialogAlert(response);
@@ -153,150 +150,6 @@ const FormProductScreen = (props) => {
     else console.log(response);
   };
 
-  const FormProduct = () => (
-    <Formik
-      enableReinitialize={true}
-      initialValues={{
-        name: data && data.name ? data.name : "",
-        price: data && data.price ? data.price : "",
-        detail: data && data.detail ? data.detail : "",
-        seed: data && data.seed ? data.seed : "",
-        level: data && data.level ? data.level : "",
-        categoryId: data && data.categoryId ? data.categoryId : "",
-      }}
-      validate={(values) => {
-        let errors = {};
-        if (!values.name) errors.name = "กรุณากรอกข้อมูล";
-        if (!values.price) errors.price = "กรุณากรอกข้อมูล";
-        if (!values.categoryId) errors.categoryId = "กรุณาเลือกประเภท";
-        if (values.categoryId == 3 && !values.seed)
-          errors.seed = "กรุณากรอกข้อมูล";
-        if (values.categoryId == 3 && !values.level)
-          errors.level = "กรุณาเลือกระดับกาแฟ";
-        return errors;
-      }}
-      onSubmit={(values) => {
-        onSubmitProduct(values);
-      }}
-    >
-      {({ values, handleSubmit, handleChange, errors, touched }) => (
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">ชื่อสินค้า</label>
-            <input
-              type="text"
-              className={
-                "form-control " +
-                (errors.name && touched.name && errors.name ? "is-invalid" : "")
-              }
-              placeholder="กรอกชื่อสินค้า"
-              name="name"
-              value={values.name}
-              onChange={handleChange}
-            />
-            <div className="invalid-feedback">{errors.name}</div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label">ประเภท</label>
-            <Field
-              className={
-                "form-control " +
-                (errors.categoryId && touched.categoryId && errors.categoryId
-                  ? "is-invalid"
-                  : "")
-              }
-              as="select"
-              name="categoryId"
-            >
-              <option value="">เลือกประเภท</option>
-              {category &&
-                category.map((item, i) => (
-                  <option key={i} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-            </Field>
-            <div className="invalid-feedback">{errors.categoryId}</div>
-          </div>
-          {values.categoryId == 3 && (
-            <>
-              <div className="mb-3">
-                <label className="form-label">เมล็ดพันธ์</label>
-                <input
-                  type="text"
-                  className={
-                    "form-control " +
-                    (errors.seed && touched.seed && errors.seed
-                      ? "is-invalid"
-                      : "")
-                  }
-                  placeholder="กรอกเมล็ดพันธ์"
-                  name="seed"
-                  value={values.seed}
-                  onChange={handleChange}
-                />
-                <div className="invalid-feedback">{errors.seed}</div>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">ระดับการคั่ว</label>
-                <Field
-                  className={
-                    "form-control " +
-                    (errors.level && touched.level && errors.level
-                      ? "is-invalid"
-                      : "")
-                  }
-                  as="select"
-                  name="level"
-                >
-                  <option value="">เลือกระดับ</option>
-                  <option value="คั่วอ่อน">คั่วอ่อน</option>
-                  <option value="คั่วกลาง">คั่วกลาง</option>
-                  <option value="คั่วเข็ม">คั่วเข็ม</option>
-                </Field>
-                <div className="invalid-feedback">{errors.level}</div>
-              </div>
-            </>
-          )}
-          <div className="mb-3">
-            <label className="form-label">ราคา</label>
-            <input
-              type="number"
-              className={
-                "form-control " +
-                (errors.price && touched.price && errors.price
-                  ? "is-invalid"
-                  : "")
-              }
-              placeholder="กรอกราคาสินค้า"
-              name="price"
-              value={values.price}
-              onChange={handleChange}
-            />
-            <div className="invalid-feedback">{errors.price}</div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label">รายละเอียด</label>
-            <textarea
-              type="text"
-              className="form-control"
-              placeholder="กรอกรายละเอียด"
-              name="detail"
-              value={values.detail}
-              onChange={handleChange}
-              rows="4"
-            />
-          </div>
-          <div className="mb-3">
-            <button type="submit" className="btn btn-success float-end">
-              {isLoading && isLoading}บันทึก
-            </button>
-          </div>
-        </form>
-      )}
-    </Formik>
-  );
-
   return (
     <main>
       <div className="container-fluid px-4">
@@ -307,42 +160,211 @@ const FormProductScreen = (props) => {
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>
-        <div className="card mb-4">
-          <div className="card-body">
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">รูปภาพสินค้า</label>
-                  <input
-                    className="form-control mb-3"
-                    type="file"
-                    multiple
-                    onChange={(e) => setUpfileList(e.target.files)}
-                  />
-                  {upfileList && (
-                    <div className="card mb-3">
-                      <div className="card-header">
-                        <h3>รูปภาพสินค้าที่จะบันทึก</h3>
+
+        <Formik
+          enableReinitialize={true}
+          initialValues={{
+            name: data && data.name ? data.name : "",
+            price: data && data.price ? data.price : "",
+            detail: data && data.detail ? data.detail : "",
+            seed: data && data.seed ? data.seed : "",
+            level: data && data.level ? data.level : "",
+            categoryId: data && data.categoryId ? data.categoryId : "",
+            upfileList: null,
+          }}
+          validate={(values) => {
+            let errors = {};
+            if (!values.name) errors.name = "กรุณากรอกข้อมูล";
+            if (!values.price) errors.price = "กรุณากรอกข้อมูล";
+            if (!values.categoryId) errors.categoryId = "กรุณาเลือกประเภท";
+            if (values.categoryId == 3 && !values.seed)
+              errors.seed = "กรุณากรอกข้อมูล";
+            if (values.categoryId == 3 && !values.level)
+              errors.level = "กรุณาเลือกระดับกาแฟ";
+            return errors;
+          }}
+          onSubmit={(values) => {
+            onSubmitProduct(values);
+          }}
+        >
+          {({
+            values,
+            handleSubmit,
+            handleChange,
+            errors,
+            touched,
+            setFieldValue,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <div className="card mb-4">
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="mb-3">
+                        <label className="form-label">รูปภาพสินค้า</label>
+                        <input
+                          className="form-control mb-3"
+                          type="file"
+                          multiple
+                          name="upfileList"
+                          onChange={(e) =>
+                            setFieldValue("upfileList", e.target.files)
+                          }
+                        />
+                        {values.upfileList && (
+                          <div className="card mb-3">
+                            <div className="card-header">
+                              <h3>รูปภาพสินค้าที่จะบันทึก</h3>
+                            </div>
+                            <LoopShowImage data={values.upfileList} />
+                          </div>
+                        )}
+                        {data &&
+                          data.productImages &&
+                          data.productImages.length && (
+                            <div className="card mb-3">
+                              <div className="card-header">
+                                <h3>รูปภาพสินค้าเดิม</h3>
+                              </div>
+                              <LoopShowOldImage data={data.productImages} />
+                            </div>
+                          )}
                       </div>
-                      <LoopShowImage data={upfileList} />
                     </div>
-                  )}
-                  {data && data.productImages && data.productImages.length && (
-                    <div className="card mb-3">
-                      <div className="card-header">
-                        <h3>รูปภาพสินค้าเดิม</h3>
+                    <div className="col-md-6">
+                      <div>
+                        <div className="mb-3">
+                          <label className="form-label">ชื่อสินค้า</label>
+                          <input
+                            type="text"
+                            className={
+                              "form-control " +
+                              (errors.name && touched.name && errors.name
+                                ? "is-invalid"
+                                : "")
+                            }
+                            placeholder="กรอกชื่อสินค้า"
+                            name="name"
+                            value={values.name}
+                            onChange={handleChange}
+                          />
+                          <div className="invalid-feedback">{errors.name}</div>
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">ประเภท</label>
+                          <Field
+                            className={
+                              "form-control " +
+                              (errors.categoryId &&
+                              touched.categoryId &&
+                              errors.categoryId
+                                ? "is-invalid"
+                                : "")
+                            }
+                            as="select"
+                            name="categoryId"
+                          >
+                            <option value="">เลือกประเภท</option>
+                            {category &&
+                              category.map((item, i) => (
+                                <option key={i} value={item.id}>
+                                  {item.name}
+                                </option>
+                              ))}
+                          </Field>
+                          <div className="invalid-feedback">
+                            {errors.categoryId}
+                          </div>
+                        </div>
+                        {values.categoryId == 3 && (
+                          <>
+                            <div className="mb-3">
+                              <label className="form-label">เมล็ดพันธ์</label>
+                              <input
+                                type="text"
+                                className={
+                                  "form-control " +
+                                  (errors.seed && touched.seed && errors.seed
+                                    ? "is-invalid"
+                                    : "")
+                                }
+                                placeholder="กรอกเมล็ดพันธ์"
+                                name="seed"
+                                value={values.seed}
+                                onChange={handleChange}
+                              />
+                              <div className="invalid-feedback">
+                                {errors.seed}
+                              </div>
+                            </div>
+                            <div className="mb-3">
+                              <label className="form-label">ระดับการคั่ว</label>
+                              <Field
+                                className={
+                                  "form-control " +
+                                  (errors.level && touched.level && errors.level
+                                    ? "is-invalid"
+                                    : "")
+                                }
+                                as="select"
+                                name="level"
+                              >
+                                <option value="">เลือกระดับ</option>
+                                <option value="คั่วอ่อน">คั่วอ่อน</option>
+                                <option value="คั่วกลาง">คั่วกลาง</option>
+                                <option value="คั่วเข็ม">คั่วเข็ม</option>
+                              </Field>
+                              <div className="invalid-feedback">
+                                {errors.level}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        <div className="mb-3">
+                          <label className="form-label">ราคา</label>
+                          <input
+                            type="number"
+                            className={
+                              "form-control " +
+                              (errors.price && touched.price && errors.price
+                                ? "is-invalid"
+                                : "")
+                            }
+                            placeholder="กรอกราคาสินค้า"
+                            name="price"
+                            value={values.price}
+                            onChange={handleChange}
+                          />
+                          <div className="invalid-feedback">{errors.price}</div>
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">รายละเอียด</label>
+                          <textarea
+                            type="text"
+                            className="form-control"
+                            placeholder="กรอกรายละเอียด"
+                            name="detail"
+                            value={values.detail}
+                            onChange={handleChange}
+                            rows="8"
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <button
+                            type="submit"
+                            className="btn btn-success float-end"
+                          >
+                            {isLoading && isLoading}บันทึก
+                          </button>
+                        </div>
                       </div>
-                      <LoopShowOldImage data={data.productImages} />
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <FormProduct />
-              </div>
-            </div>
-          </div>
-        </div>
+            </form>
+          )}
+        </Formik>
       </div>
     </main>
   );

@@ -18,8 +18,7 @@ const MainProductsScreen = (props) => {
   const dispatch = useDispatch();
   const [data, setData] = useState();
   const { pagination } = useSelector((state) => state.product);
-  const [search, setSearch] = useState("");
-  const [categoryId, setCategoryId] = useState(0);
+  const [search, setSearch] = useState(""); 
 
   useEffect(() => {
     GetData();
@@ -29,11 +28,12 @@ const MainProductsScreen = (props) => {
     var response = await productService.GetProducts({
       ...pagination,
       search,
-      categoryId,
     });
     if (response.statusCode === 200) {
       setData(response.data);
-      dispatch(productActions.setPagination(response.pagination));
+      dispatch(
+        productActions.setPagination({ ...pagination, ...response.pagination })
+      );
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -41,6 +41,12 @@ const MainProductsScreen = (props) => {
   const onChangeCurrentPage = (page) => {
     pagination.currentPage = page;
     dispatch(productActions.setPagination(pagination));
+    GetData();
+  };
+
+  const onChangePageSize = (pageSize) => {
+    pagination.pageSize = pageSize;
+    pagination.currentPage = 1; 
     GetData();
   };
 
@@ -307,7 +313,7 @@ const MainProductsScreen = (props) => {
             ตารางข้อมูลสินค้า
           </div>
           <div className="card-body table-responsive">
-            <table className="table table-striped table-hover ">
+            <table className="table table-hover ">
               <thead>
                 <tr>
                   <th scope="col" className="col-md-2 text-center">
@@ -340,18 +346,14 @@ const MainProductsScreen = (props) => {
 
             {!data && (
               <div className="d-flex justify-content-center">
-                <button
-                className="btn btn-primary"
-                type="button"
-                disabled
-              >
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                กำลังโหลด...
-              </button>
+                <button className="btn btn-primary" type="button" disabled>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  กำลังโหลด...
+                </button>
               </div>
             )}
 
@@ -360,6 +362,8 @@ const MainProductsScreen = (props) => {
               currentPage={pagination.currentPage}
               totalPage={pagination.totalPage}
               count={pagination.count}
+              pageSize={pagination.pageSize}
+              onChangePageSize={async (pageSize) => onChangePageSize(pageSize)}
             />
           </div>
         </div>

@@ -1,89 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+import React, { useEffect } from "react";
 
 import Pageination from "../../../components/Pagination";
 import * as functionService from "../../../helper/functionService";
-import * as accountActions from "../../../actions/account.action";
-import * as accountService from "../../../services/account.service";
+import useMainAccount from "./useMainAccount";
 
 const MainAccountScreen = (props) => {
-  const dispatch = useDispatch();
-  const [data, setData] = useState();
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    pageSize: 5,
-  });
-  const [search, setSearch] = useState("");
-
-  const pageSizeList = [5, 10, 25, 50];
+  const {
+    data,
+    navigation,
+    pagination,
+    search,
+    setSearch,
+    GetData,
+    onChangeCurrentPage,
+    onChangePageSize,
+    onDeleteAccount,
+  } = useMainAccount();
 
   useEffect(() => {
     GetData();
   }, []);
-
-  const GetData = async () => {
-    const token = localStorage.getItem("token");
-    let isChkToken = await accountService.IsCheckToken(token);
-    if (isChkToken) {
-      var response = await accountService.GetAccounts({
-        ...pagination,
-        search,
-        token,
-      });
-      if (response.statusCode === 200) {
-        setData(response.data);
-        setPagination(response.pagination);
-      }
-    } else {
-      localStorage.removeItem("token");
-      dispatch(accountActions.clear());
-    }
-    functionService.ScrollToTop();
-  };
-
-  const onChangeCurrentPage = (page) => {
-    pagination.currentPage = page;
-    setPagination(pagination);
-    GetData();
-  };
-
-  const onDeleteAccount = async (item) => {
-    Swal.fire({
-      title: "ยืนยันการลบ?",
-      text: `ต้องการลบบัญชีผู้ใช้ ${item.name}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "ตกลง",
-      cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const token = localStorage.getItem("token");
-        var isChkToken = await accountService.IsCheckToken(token);
-        if (isChkToken) {
-          var response = await accountService.DeleteAccount({
-            id: item.id,
-            token,
-          });
-          DialogAlert(response);
-        }
-      }
-    });
-  };
-
-  const DialogAlert = (response) => {
-    if (response.statusCode == 200) {
-      Swal.fire("Deleted!", response.message, "success");
-      GetData();
-    } else
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: response.message,
-      });
-  };
 
   const BuildColumn = () => {
     if (data)
@@ -114,7 +50,11 @@ const MainAccountScreen = (props) => {
           </td>
           <td className="text-center">
             <div className="btn-group">
-              <button type="button" className="btn btn-warning">
+              <button
+                type="button"
+                className="btn btn-warning"
+                onClick={() => navigation("/detailaccount/" + item.id)}
+              >
                 <i
                   className="fa-solid fa-address-card"
                   style={{ color: "white" }}
@@ -170,17 +110,19 @@ const MainAccountScreen = (props) => {
                 <i className="fas fa-search"></i>
               </button>
               <div className="vr" />
-              <button
-                className="btn btn-danger"
-                id="btnNavbarSearch"
-                type="button"
-                onClick={() => {
-                  setSearch("");
-                  GetData();
-                }}
-              >
-                <i className="fa-solid fa-arrow-rotate-left"></i>
-              </button>
+              <div className="btn-group">
+                <button
+                  className="btn btn-danger"
+                  id="btnNavbarSearch"
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    GetData();
+                  }}
+                >
+                  <i className="fa-solid fa-arrow-rotate-left"></i>
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -190,7 +132,7 @@ const MainAccountScreen = (props) => {
             ตารางข้อมูลผู้ใช้
           </div>
           <div className="card-body table-responsive">
-            <table className="table table-striped table-hover">
+            <table className="table table-hover">
               <thead>
                 <tr>
                   <th className="col-md-1 text-center">บัญชีผู้ใช้</th>
@@ -223,7 +165,9 @@ const MainAccountScreen = (props) => {
               currentPage={pagination.currentPage}
               totalPage={pagination.totalPage}
               count={pagination.count}
+              pageSize={pagination.pageSize}
               onChange={async (page) => onChangeCurrentPage(page)}
+              onChangePageSize={async (pageSize) => onChangePageSize(pageSize)}
             />
           </div>
         </div>

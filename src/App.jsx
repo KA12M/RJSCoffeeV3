@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 
 // Redux SetUp
 import { Provider, useDispatch } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, legacy_createStore } from "redux";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
-const store = createStore(reducers, applyMiddleware(thunk, logger));
+const store = legacy_createStore(reducers, applyMiddleware(thunk, logger));
 // End Redux SetUp
 
 import * as manageStockService from "./services/manageStock.service";
@@ -48,7 +48,7 @@ const App = () => {
           justifyContent: "center",
         }}
       >
-        <img src="../assets/img/Pulse-1s-200px.gif" alt="Loading" />
+        <img src="/src/isloading.gif" alt="Loading" />
       </div>
     );
   return <ManageRoute />;

@@ -28,34 +28,36 @@ const DetailManageStock = (props) => {
   const BuildMangeItem = () => {
     if (data && data.manageItem)
       return data.manageItem.map((item, i) => (
-        <div key={i} className="d-flex position-relative p-3">
-          <Link to={"/detailproduct/" + item.product.id}>
-            <img
-              src={
-                item.product.productImage
-                  ? item.product.productImage
-                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-              }
-              style={{
-                width: "120px",
-                height: "120px",
-                objectFit: "cover",
-                borderRadius: "5px",
-              }}
-              className="flex-shrink-0 me-3"
-              alt="..."
-            />
-          </Link>
-          <div style={{ width: "50%" }}>
-            <h5 className="mt-0">{item.product.name}</h5>
-            <p>
-              {item.product.categoryName},{" "}
-              {functionService.IntMoney(item.product.price)} บาท
-            </p>
-            <div className="d-flex justify-content-between">
-              <div className="p-2">x{item.amount}</div>
-              <div className="ml-auto p-2">
-                {functionService.IntMoney(item.sumAmountPrice)} บาท
+        <div key={i} className="card mb-3 m-2">
+          <div className="row g-0">
+            <Link to={"/detailproduct/" + item.product.id} className="col-md-2">
+              <img
+                src={
+                  item.product.productImage
+                    ? item.product.productImage
+                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
+                }
+                style={{
+                  objectFit: "cover",
+                  borderRadius: "5px",
+                }}
+                className="img-fluid rounded-start"
+                alt="..."
+              />
+            </Link>
+            <div className="col-md-8">
+              <div className="card-body">
+                <h5 className="card-title">{item.product.name}</h5>
+                <p className="card-text">
+                  {item.product.categoryName},{" "}
+                  {functionService.IntMoney(item.product.price)} บาท
+                </p>
+                <p className="card-text">
+                  <small className="text-muted">
+                    x{item.amount}{" "}
+                    {functionService.IntMoney(item.sumAmountPrice)} บาท
+                  </small>
+                </p>
               </div>
             </div>
           </div>
@@ -78,7 +80,10 @@ const DetailManageStock = (props) => {
         <div className="card mb-4 shadow-sm">
           <div className="card-header mb-3">
             <h4>
-              {props.NameTH} <div className="badge bg-light fs-5 text-warning">{functionService.Dateformat(data.createdDate)}</div>
+              {props.NameTH}{" "}
+              <div className="badge bg-light fs-5 text-warning">
+                {functionService.Dateformat(data.createdDate)}
+              </div>
             </h4>
           </div>
           <div className="row">
@@ -90,9 +95,7 @@ const DetailManageStock = (props) => {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="row">
-                <BuildMangeItem />
-              </div>
+              <BuildMangeItem />
             </div>
           </div>
         </div>

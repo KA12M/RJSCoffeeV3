@@ -16,3 +16,9 @@ export const setPagination = (payload) => (dispatch) =>
     type: constants.STOCK_SET_PAGINATION,
     payload,
   });
+
+export const setTotal = (payload) => (dispatch) =>
+  dispatch({
+    type: constants.STOCK_SET_TOTAL,
+    payload,
+  });

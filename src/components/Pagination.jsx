@@ -15,11 +15,15 @@ Pagination.defaultProps = {
   },
 };
 
+const sizeList = [5, 10, 25, 50, 100];
+
 export default function Pagination({
   onChange,
   currentPage,
   totalPage,
   count,
+  pageSize,
+  onChangePageSize,
 }) {
   const [currentPages, setCurrentPages] = React.useState(currentPage);
 
@@ -110,7 +114,9 @@ export default function Pagination({
           </li>
           {items}
           <li
-            className={"page-item " + (currentPage == totalPage && "disabled")}
+            className={
+              "btn-group page-item " + (currentPage == totalPage && "disabled")
+            }
           >
             <button
               type="button"
@@ -121,6 +127,24 @@ export default function Pagination({
             >
               ต่อไป
             </button>
+            <div className="btn-group" role="group">
+              <button
+                id="btnGroupDrop1"
+                type="button"
+                className="btn btn-outline-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {pageSize}
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                {sizeList.map((item, i) => (
+                  <li key={i} onClick={() => onChangePageSize(item)}>
+                    <div className="dropdown-item">{item}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>

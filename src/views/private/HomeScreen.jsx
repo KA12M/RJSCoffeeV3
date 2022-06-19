@@ -29,9 +29,11 @@ const Home = (props) => {
         <div key={index} className="d-flex position-relative">
           <img
             style={{
-              width: "120px",
-              height: "120px",
+              width: "90px",
+              height: "90px",
               objectFit: "cover",
+              borderRadius: '100%',
+              padding: '8px',
             }}
             src={
               item.profileImage
@@ -42,15 +44,13 @@ const Home = (props) => {
             alt="..."
           />
           <div>
-            <h5 className="mt-0">
-              {functionService.timeSince(item.createDate)}
+            <h5 className="mt-3">
+              {item.name} {item.username} 
             </h5>
-            <p>
-              This is some placeholder content for the custom component. It is
-              intended to mimic what some real-world content would look like,
-              and we're using it here to give the component a bit of body and
-              size.
-            </p>
+            <h6>เข้าสู่ระบบ: {functionService.timeSince(item.createDate)} {functionService.Dateformat(item.createDate)}</h6>
+            <h6>
+              
+            </h6>
           </div>
         </div>
       );

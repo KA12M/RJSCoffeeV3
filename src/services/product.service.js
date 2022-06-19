@@ -53,7 +53,7 @@ export const DeleteProduct = async ({ id, token }) => {
   }
 };
 
-export const CreateProduct = async (values, upfiles, token) => {
+export const CreateProduct = async (values, token) => {
   try {
     let url = "apiproducts/CreateProduct";
     var config = {
@@ -66,9 +66,9 @@ export const CreateProduct = async (values, upfiles, token) => {
     formData.append("seed", values.seed);
     formData.append("level", values.level);
     formData.append("categoryId", parseInt(values.categoryId));
-    if (upfiles)
-      for (let i = 0; i < upfiles.length; i++) {
-        formData.append("upfile", upfiles[i]);
+    if (values.upfileList)
+      for (let i = 0; i < values.upfileList.length; i++) {
+        formData.append("upfile", values.upfileList[i]);
       }
     var response = await API.post(url, formData, config);
     return response.data;
@@ -78,7 +78,7 @@ export const CreateProduct = async (values, upfiles, token) => {
   }
 };
 
-export const UpdateProduct = async (values, upfiles, token) => {
+export const UpdateProduct = async (values, token) => {
   try {
     let url = "ApiProducts/UpdateProduct";
     var config = {
@@ -92,9 +92,9 @@ export const UpdateProduct = async (values, upfiles, token) => {
     formData.append("seed", values.seed);
     formData.append("level", values.level);
     formData.append("categoryId", parseInt(values.categoryId));
-    if (upfiles)
-      for (let i = 0; i < upfiles.length; i++) {
-        formData.append("upfile", upfiles[i]);
+    if (values.upfileList)
+      for (let i = 0; i < values.upfileList.length; i++) {
+        formData.append("upfile", values.upfileList[i]);
       }
     var response = await API.put(url, formData, config);
     return response.data;

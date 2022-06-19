@@ -21,14 +21,13 @@ const MainManageStock = (props) => {
     var token = localStorage.getItem("token");
     var isToken = await IsCheckToken(token);
     if (isToken) {
-      setData();
       var response = await manageStockService.GetManageStocks(
         pagination,
         token
       );
       if (response.statusCode === 200) {
         setData(response.data);
-        dispatch(setPagination(response.pagination));
+        dispatch(setPagination({ ...pagination, ...response.pagination }));
       } else console.log(response.message);
     }
   };
@@ -36,6 +35,12 @@ const MainManageStock = (props) => {
   const onChangeCurrentPage = (page) => {
     pagination.currentPage = page;
     dispatch(setPagination(pagination));
+    GetManageStock();
+  };
+
+  const onChangePageSize = (pageSize) => {
+    pagination.pageSize = pageSize;
+    pagination.currentPage = 1;
     GetManageStock();
   };
 
@@ -97,60 +102,60 @@ const MainManageStock = (props) => {
         </ol>
 
         <div className="card mb-4">
-          <div className="card mb-4">
-            <div className="card-header">
-              <i className="fas fa-table me-1"></i>
-              ตาราง{props.NameTH}
-            </div>
-            <div className="card-body table-responsive">
-              <div className="row mb-3 p-2">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th className="text-center" scope="col">
-                        รายการ
-                      </th>
-                      <th className="text-center" scope="col">
-                        เลขสั่งซื้อ
-                      </th>
-                      <th className="text-center" scope="col">
-                        ทั้งหมด
-                      </th>
-                      <th className="text-center" scope="col">
-                        ยอดรวม
-                      </th>
-                      <th className="text-center" scope="col">
-                        วันที่
-                      </th>
-                      <th className="text-center" scope="col">
-                        จัดการ
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>{data && <BuildColumn />} </tbody>
-                </table>
+          <div className="card-header">
+            <i className="fas fa-table me-1"></i>
+            ตาราง{props.NameTH}
+          </div>
+          <div className="card-body table-responsive">
+            <div className="row mb-3 p-2">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th className="text-center" scope="col">
+                      รายการ
+                    </th>
+                    <th className="text-center" scope="col">
+                      เลขสั่งซื้อ
+                    </th>
+                    <th className="text-center" scope="col">
+                      ทั้งหมด
+                    </th>
+                    <th className="text-center" scope="col">
+                      ยอดรวม
+                    </th>
+                    <th className="text-center" scope="col">
+                      วันที่
+                    </th>
+                    <th className="text-center" scope="col">
+                      จัดการ
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>{data && <BuildColumn />} </tbody>
+              </table>
 
-                {!data && (
-                  <div className="d-flex justify-content-center">
-                    <button className="btn btn-primary" type="button" disabled>
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      กำลังโหลด...
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <Pagination
-                onChange={async (page) => onChangeCurrentPage(page)}
-                currentPage={pagination.currentPage}
-                totalPage={pagination.totalPage}
-                count={pagination.count}
-              />
+              {!data && (
+                <div className="d-flex justify-content-center">
+                  <button className="btn btn-primary" type="button" disabled>
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    กำลังโหลด...
+                  </button>
+                </div>
+              )}
             </div>
+
+            <Pagination
+              onChange={async (page) => onChangeCurrentPage(page)}
+              currentPage={pagination.currentPage}
+              totalPage={pagination.totalPage}
+              count={pagination.count}
+              pageSize={pagination.pageSize}
+              onChangePageSize={async (pageSize) => onChangePageSize(pageSize)}
+            />
           </div>
         </div>
       </div>
