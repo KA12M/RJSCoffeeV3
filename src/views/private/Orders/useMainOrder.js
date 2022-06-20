@@ -27,7 +27,21 @@ const UseMainOrder = () => {
     }
   };
 
-  return { GetOrders, data, pagination };
+  const onChangePageSize = async (pageSize) => {
+    pagination.pageSize = pageSize;
+    dispatch(orderActions.setPagination({ ...pagination, pageSize: pageSize }));
+    GetOrders();
+  };
+
+  const onChangeCurrentPage = async (currentPage) => {
+    pagination.currentPage = currentPage;
+    dispatch(
+      orderActions.setPagination({ ...pagination, currentPage: currentPage })
+    );
+    GetOrders();
+  };
+
+  return { GetOrders, data, pagination, onChangePageSize,onChangeCurrentPage };
 };
 
 export default UseMainOrder;

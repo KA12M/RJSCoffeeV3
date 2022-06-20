@@ -12,6 +12,7 @@ import MainManageStock from "../views/private/ManageStock/MainManageStock";
 import DetailManageStock from "../views/private/ManageStock/DetailManageStock";
 import DetailAccountScreen from "../views/private/Accounts/DetailAccountScreen";
 import MainOrderScreen from "../views/private/Orders/MainOrderScreen";
+import DetailOrderScreen from "../views/private/Orders/DetailOrderScreen";
 
 import Page401 from "../views/401";
 
@@ -105,6 +106,12 @@ export const RouteList = [
         NameTH: "ข้อมูลคำสั่งซื้อของลูกค้า",
         Path: "/mainorders",
         Component: MainOrderScreen,
+      },
+      {
+        TitleTH: "รายละเอียดคำสั่งซื้อ",
+        NameTH: "ข้อมูลรายละเอียดคำสั่งซื้อ",
+        Path: "/detailorder/:id",
+        Component: DetailOrderScreen,
       },
     ],
   },

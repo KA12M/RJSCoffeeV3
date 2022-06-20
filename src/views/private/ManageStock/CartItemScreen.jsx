@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link,   } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import * as manageStockService from "../../../services/manageStock.service";
 import * as functionService from "../../../helper/functionService";
 import { IsCheckToken } from "../../../services/account.service";
 import { clear } from "../../../actions/account.action";
-import { setCartItem,setTotal } from "../../../actions/managestock.action";
+import { setCartItem, setTotal } from "../../../actions/managestock.action";
 
-const CartItemScreen = (props) => { 
+const CartItemScreen = (props) => {
   const dispatch = useDispatch();
-  const { cartItem,total  } = useSelector((state) => state.manageStock); 
+  const { cartItem, total } = useSelector((state) => state.manageStock);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const CartItemScreen = (props) => {
       var response = await manageStockService.GetAddStocks(token);
       if (response.statusCode == 200) {
         dispatch(setCartItem(response.data));
-        dispatch(setTotal(response.total)); 
+        dispatch(setTotal(response.total));
       } else console.log(response);
     } else {
       localStorage.removeItem("token");
@@ -120,7 +120,7 @@ const CartItemScreen = (props) => {
               title: response.message,
               showConfirmButton: false,
               timer: 1500,
-            }); 
+            });
           } else console.log(response);
         } else {
           localStorage.removeItem("token");
@@ -204,7 +204,7 @@ const CartItemScreen = (props) => {
         <h1 className="mt-4">{props.TitleTH}</h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
-            <a href="/#/">หน้าหลัก</a>
+            <Link to="/">หน้าหลัก</Link>
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>
@@ -262,7 +262,7 @@ const CartItemScreen = (props) => {
                 >
                   {isLoading ? (
                     <span
-                      class="spinner-border spinner-border-sm"
+                      className="spinner-border spinner-border-sm"
                       role="status"
                       aria-hidden="true"
                     />

@@ -19,7 +19,6 @@ const DetailProductScreen = (props) => {
     var response = await productService.GetById(id);
     if (response.statusCode == 200) setData(response.data);
     else console.log(response.message);
-    console.log(response.data);
   };
 
   const BuildGallery = () => {
@@ -120,7 +119,7 @@ const DetailProductScreen = (props) => {
           justifyContent: "center",
         }}
       >
-        <img src="assets/img/Pulse-1s-200px.gif" alt="Loading" />
+        <img src="/src/isloading.gif" alt="Loading" />
       </div>
     );
   return (
@@ -129,7 +128,7 @@ const DetailProductScreen = (props) => {
         <h1 className="mt-4">{props.TitleTH}</h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
-            <a href="/#/">หน้าหลัก</a>
+            <Link to="/">หน้าหลัก</Link>
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>

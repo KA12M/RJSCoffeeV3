@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { default as statusOrderData } from "../helper/json/OrderStatus.json";
 
 export const Dateformat = (date) =>
   Intl.DateTimeFormat("th-TH", {
@@ -7,6 +8,21 @@ export const Dateformat = (date) =>
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
+  }).format(Date.parse(date));
+
+export const DateTH = (date) =>
+  Intl.DateTimeFormat("th-TH", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(Date.parse(date));
+
+export const DateDayTH = (date) =>
+  Intl.DateTimeFormat("th-TH", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
   }).format(Date.parse(date));
 
 export const IntMoney = (int) => {
@@ -45,3 +61,6 @@ export function timeSince(date) {
   }
   return Math.floor(seconds) + " วินาทีที่แล้ว";
 }
+
+export const OrderStatusFilter = (status) =>
+  statusOrderData.filter((a) => a.id === status)[0].NameTH;

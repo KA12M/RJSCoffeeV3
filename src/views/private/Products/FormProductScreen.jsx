@@ -1,6 +1,6 @@
 import { Formik, Field } from "formik";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import * as accountActions from "../../../actions/account.action";
@@ -49,18 +49,12 @@ const FormProductScreen = (props) => {
   };
 
   const onCreateProduct = async (values, token) => {
-    var response = await productService.CreateProduct(
-      values, 
-      token
-    );
+    var response = await productService.CreateProduct(values, token);
     DialogAlert(response);
   };
 
   const onUpdateProduct = async (values, token) => {
-    var response = await productService.UpdateProduct(
-      { ...values, id }, 
-      token
-    );
+    var response = await productService.UpdateProduct({ ...values, id }, token);
     DialogAlert(response);
   };
 
@@ -156,7 +150,7 @@ const FormProductScreen = (props) => {
         <h1 className="mt-4">{props.TitleTH}</h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
-            <a href="/#/">หน้าหลัก</a>
+            <Link to="/">หน้าหลัก</Link>
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>

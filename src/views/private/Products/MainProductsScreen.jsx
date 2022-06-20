@@ -18,7 +18,7 @@ const MainProductsScreen = (props) => {
   const dispatch = useDispatch();
   const [data, setData] = useState();
   const { pagination } = useSelector((state) => state.product);
-  const [search, setSearch] = useState(""); 
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     GetData();
@@ -46,7 +46,7 @@ const MainProductsScreen = (props) => {
 
   const onChangePageSize = (pageSize) => {
     pagination.pageSize = pageSize;
-    pagination.currentPage = 1; 
+    pagination.currentPage = 1;
     GetData();
   };
 
@@ -242,7 +242,7 @@ const MainProductsScreen = (props) => {
         <h1 className="mt-4">{props.TitleTH}</h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
-            <a href="/#/">หน้าหลัก</a>
+            <Link to="/">หน้าหลัก</Link>
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>

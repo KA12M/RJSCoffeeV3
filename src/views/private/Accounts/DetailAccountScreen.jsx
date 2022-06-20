@@ -30,15 +30,17 @@ const DetailAccountScreen = (props) => {
 
   const BuildAddressCard = () =>
     address.map((item, i) => (
-      <div key={i} class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">{item.name}</h5>
-          <p class="card-text">
+      <div key={i} className="card mb-3">
+        <div className="card-body">
+          <h5 className="card-title">{item.name}</h5>
+          <p className="card-text">
             {item.detail} ต.{item.subDistrict} อ.{item.district} จ.
             {item.province} {item.zipCode}
           </p>
-          <p class="card-text">
-            <small class="text-muted">เบอร์โทรศัพท์: {item.telephone}</small>
+          <p className="card-text">
+            <small className="text-muted">
+              เบอร์โทรศัพท์: {item.telephone}
+            </small>
           </p>
         </div>
       </div>
@@ -46,11 +48,11 @@ const DetailAccountScreen = (props) => {
 
   const BuildCartItem = () =>
     cartItemData.map((item, i) => (
-      <div key={i} class="card mb-3">
-        <div class="row g-0">
+      <div key={i} className="card mb-3">
+        <div className="row g-0">
           <Link
             to={"/detailproduct/" + item.productId}
-            class="col-md-2"
+            className="col-md-2"
             style={{ alignContent: "center" }}
           >
             <img
@@ -60,23 +62,23 @@ const DetailAccountScreen = (props) => {
                 objectFit: "cover",
               }}
               src={item.productImage}
-              class="img-fluid rounded-start"
+              className="d-flex justify-content-center align-items-center"
               alt="..."
             />
           </Link>
-          <div class="col-md-10">
-            <div class="card-body">
-              <h5 class="card-title">{item.productName}</h5>
-              <p class="card-text">
+          <div className="col-md-10">
+            <div className="card-body">
+              <h5 className="card-title">{item.productName}</h5>
+              <p className="card-text">
                 {item.productCategoryName},{" "}
                 {functionService.IntMoney(item.productPrice)} บาท
               </p>
-              <p class="card-text">
+              <p className="card-text">
                 x{item.amount} ชิ้น{" "}
                 {functionService.IntMoney(item.sumAmountPrice)} บาท
               </p>
-              <p class="card-text">
-                <small class="text-muted">
+              <p className="card-text">
+                <small className="text-muted">
                   เพิ่มเมื่อ {functionService.timeSince(item.createDate)}{" "}
                   {functionService.Dateformat(item.createDate)}
                 </small>

@@ -16,7 +16,7 @@ export default () => {
                 <div className="text-center mt-4">
                   <img
                     className="mb-4 img-error"
-                    src="../../assets/img/error-404-monochrome.svg"
+                    src="../error-404-monochrome.svg"
                   />
                   <p className="lead">
                     This requested URL was not found on this server.

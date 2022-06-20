@@ -22,8 +22,7 @@ const UseDetailAccount = () => {
         if (item.data.address.length > 0) setAddress(item.data.address);
       });
       await cartItemService.GetByAccountId(id, token).then((item) => {
-        if (item.data.length > 0) setCartItemData(item.data);
-        console.log(item.data)
+        if (item.data.length > 0) setCartItemData(item.data); 
       });
     } else {
       localStorage.removeItem("token");

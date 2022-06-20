@@ -48,7 +48,7 @@ const App = () => {
           justifyContent: "center",
         }}
       >
-        <img src="/src/isloading.gif" alt="Loading" />
+        <img src="src/isloading.gif" alt="Loading" />
       </div>
     );
   return <ManageRoute />;

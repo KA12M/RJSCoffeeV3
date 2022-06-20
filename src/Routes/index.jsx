@@ -5,13 +5,13 @@ import { RouteList } from "./routes";
 import Page404 from "../views/404";
 
 export default () => {
-  const account = useSelector((state) => state.account);
+  const { user } = useSelector((state) => state.account);
   return (
     <HashRouter>
       <Routes>
         <Route path="*" element={<Page404 />} />
         {RouteList.map((item, i) => {
-          if (item.Role == account.user.roleId)
+          if (item.Role == user.roleId)
             return (
               <Route key={i} path={item.Path} element={<item.Component />}>
                 {item.Children &&

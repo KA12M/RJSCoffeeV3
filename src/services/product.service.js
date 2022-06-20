@@ -1,10 +1,10 @@
 import API from "../helper/axios";
 
 export const GetProducts = async ({
-  currentPage,
-  pageSize,
-  categoryId,
-  search,
+  currentPage = 1,
+  pageSize = 5,
+  categoryId = 0,
+  search = "",
 }) => {
   try {
     let url = "apiproducts/getproducts";
@@ -19,7 +19,7 @@ export const GetProducts = async ({
 
 export const GetById = async (id) => {
   try {
-    let url = "apiproducts/GetById/" + id; 
+    let url = "apiproducts/GetById/" + id;
     var response = await API.get(url);
     return response.data;
   } catch (e) {

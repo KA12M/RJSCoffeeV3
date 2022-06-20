@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import * as accountActions from "../../actions/account.action";
 
@@ -22,9 +22,9 @@ const Navbar = () => {
   };
   return (
     <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <a className="navbar-brand ps-3" href="/admin">
+      <Link className="navbar-brand ps-3" to="/">
         CoffeeShopV3
-      </a>
+      </Link>
       <button
         className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
         onClick={() => slideNavbar()}
@@ -59,7 +59,7 @@ const Navbar = () => {
         >
           <i className="fa-solid fa-cart-shopping"></i>
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {cartItem ? (cartItem.length>0 && cartItem.length) : ""}
+            {cartItem ? cartItem.length > 0 && cartItem.length : ""}
           </span>
         </button>
       </div>

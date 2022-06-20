@@ -46,7 +46,7 @@ const MainAccountScreen = (props) => {
           <td className="text-center">{item.role}</td>
           <td className="text-center">
             {functionService.timeSince(item.createDate) + " "}
-            {functionService.Dateformat(item.createDate)}
+            {functionService.DateTH(item.createDate)}
           </td>
           <td className="text-center">
             <div className="btn-group">

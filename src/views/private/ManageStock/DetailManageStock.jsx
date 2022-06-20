@@ -72,7 +72,7 @@ const DetailManageStock = (props) => {
         <h1 className="mt-4">{props.TitleTH}</h1>
         <ol className="breadcrumb mb-4">
           <li className="breadcrumb-item">
-            <a href="/#/">หน้าหลัก</a>
+            <Link to="/">หน้าหลัก</Link>
           </li>
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>
@@ -82,6 +82,7 @@ const DetailManageStock = (props) => {
             <h4>
               {props.NameTH}{" "}
               <div className="badge bg-light fs-5 text-warning">
+                {functionService.timeSince(data.createdDate)}{" "}
                 {functionService.Dateformat(data.createdDate)}
               </div>
             </h4>
