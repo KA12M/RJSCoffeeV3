@@ -74,9 +74,6 @@ const Slidebar = () => {
                 <Link to="/mainmanagestock" className="nav-link">
                   ข้อมูลจัดการคลังสินค้า
                 </Link>
-                <Link to="/formproduct" className="nav-link">
-                  เพิ่มสินค้า
-                </Link>
               </nav>
             </div>
             <a

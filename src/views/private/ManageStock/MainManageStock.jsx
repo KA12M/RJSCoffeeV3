@@ -1,48 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import useMainManageStock from "../../../logic/private/ManageStock/useMainManageStock";
 import * as functionService from "../../../helper/functionService";
-import * as manageStockService from "../../../services/manageStock.service";
-import { IsCheckToken } from "../../../services/account.service";
-import { setPagination } from "../../../actions/managestock.action";
-import Pagination from "./../../../components/Pagination";
+import Pagination from "../../../components/Pagination";
 
 const MainManageStock = (props) => {
-  const dispatch = useDispatch();
-  const { pagination } = useSelector((state) => state.manageStock);
-  const [data, setData] = useState();
+  const ref = React.useRef();
+  const {
+    pagination,
+    data,
+    GetManageStock,
+    onChangeCurrentPage,
+    onChangePageSize,
+  } = useMainManageStock();
 
   useEffect(() => {
     GetManageStock();
   }, []);
-
-  const GetManageStock = async () => {
-    var token = localStorage.getItem("token");
-    var isToken = await IsCheckToken(token);
-    if (isToken) {
-      var response = await manageStockService.GetManageStocks(
-        pagination,
-        token
-      );
-      if (response.statusCode === 200) {
-        setData(response.data);
-        dispatch(setPagination({ ...pagination, ...response.pagination }));
-      } else console.log(response.message);
-    }
-  };
-
-  const onChangeCurrentPage = (page) => {
-    pagination.currentPage = page;
-    dispatch(setPagination(pagination));
-    GetManageStock();
-  };
-
-  const onChangePageSize = (pageSize) => {
-    pagination.pageSize = pageSize;
-    pagination.currentPage = 1;
-    GetManageStock();
-  };
 
   const BuildColumn = () => {
     if (data)
@@ -104,7 +79,7 @@ const MainManageStock = (props) => {
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>
 
-        <div className="card mb-4">
+        <div className="card mb-4" ref={ref}>
           <div className="card-header">
             <i className="fas fa-table me-1"></i>
             ตาราง{props.NameTH}

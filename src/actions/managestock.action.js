@@ -1,4 +1,4 @@
-import * as constants from "../Constants";
+import * as constants from "../constants/redux";
 
 export const setCartItem = (payload) => (dispatch) =>
   dispatch({

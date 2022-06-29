@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 
 import * as functionService from "../../../helper/functionService";
 import Pagination from "../../../components/Pagination";
-import useMainOrder from "./useMainOrder";
+import useMainOrder from "../../../logic/private/Orders/useMainOrder";
+
+import ReactToPrint from "react-to-print";
+import ReactToPdf from "react-to-pdf";
 
 const MainOrderScreen = (props) => {
-  const { data, pagination, GetOrders, onChangePageSize, onChangeCurrentPage } =
+  const ref = React.useRef();
+
+  const { data, pagination, GetOrders, onChangePageSize, onChangeCurrentPage,handleExportExcel } =
     useMainOrder();
 
   useEffect(() => {
@@ -82,7 +87,31 @@ const MainOrderScreen = (props) => {
           <li className="breadcrumb-item active">{props.NameTH}</li>
         </ol>
 
-        <div className="card mb-4">
+        <div className="mb-2 row">
+          <div className="btn-group">
+            <button className="btn btn-success" onClick={handleExportExcel}>
+              <i className="fa-solid fa-file-excel"></i> Excel
+            </button>
+            <ReactToPdf targetRef={ref} filename="account_data.pdf">
+              {({ toPdf }) => (
+                <button className="btn btn-danger" onClick={toPdf}>
+                  <i className="fa-solid fa-file-pdf"></i> Pdf
+                </button>
+              )}
+            </ReactToPdf>
+
+            <ReactToPrint
+              trigger={() => (
+                <button className="btn btn-primary">
+                  <i className="fa-solid fa-print"></i> printing
+                </button>
+              )}
+              content={() => ref.current}
+            />
+          </div>
+        </div>
+
+        <div className="card mb-4" ref={ref}>
           <div className="card-header">
             <i className="fas fa-table me-1"></i>
             ตาราง{props.NameTH}
@@ -98,10 +127,10 @@ const MainOrderScreen = (props) => {
                     <th className="text-center col-2" scope="col">
                       เลขสั่งซื้อ
                     </th>
-                    <th className="text-center col-1" scope="col">
+                    <th className="text-center col-2" scope="col">
                       ทั้งหมด
                     </th>
-                    <th className="text-center col-1" scope="col">
+                    <th className="text-center col-2" scope="col">
                       ยอดรวม
                     </th>
                     <th className="text-center col-1" scope="col">

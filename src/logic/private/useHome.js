@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 
 import * as accountService from "../../services/account.service";
 import * as productService from "../../services/product.service";
 import * as orderService from "../../services/order.service";
 
-const UseHome = () => {
+const UseHome = () => { 
+
   const navigation = useNavigate();
   const [accountData, setAccountData] = useState();
   const [productData, setProductData] = useState();
@@ -22,7 +23,7 @@ const UseHome = () => {
       else console.log(response.message);
     }
   };
-  
+
   const GetProductData = async () => {
     var response = await productService.GetProducts({ pageSize: 3 });
     if (response.statusCode === 200) setProductData(response.data);

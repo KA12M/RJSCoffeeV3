@@ -14,6 +14,20 @@ export const GetAddStocks = async (token) => {
   }
 };
 
+export const GetForExcel = async (token) => {
+  try {
+    let url = "ApiAddStocks/GetForExcel";
+    var config = {
+      headers: { Authorization: "Bearer " + token },
+    };
+    var response = await API.get(url, config);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
 export const CraeteCartItem = async (values, token) => {
   try {
     console.log(JSON.stringify(values));

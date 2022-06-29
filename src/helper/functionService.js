@@ -25,10 +25,7 @@ export const DateDayTH = (date) =>
     weekday: "long",
   }).format(Date.parse(date));
 
-export const IntMoney = (int) => {
-  var money = new Intl.NumberFormat("th-TH");
-  return money.format(int);
-};
+export const IntMoney = (int) => new Intl.NumberFormat("th-TH").format(int);
 
 export const ScrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });

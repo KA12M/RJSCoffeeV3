@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import * as functionService from "../../../helper/functionService";
 
-import UseDetailAccount from "./useDetailAccount";
+import UseDetailAccount from "../../../logic/private/Accounts/useDetailAccount";
 
 const DetailAccountScreen = (props) => {
   const { id, navigation, accoutData, address, cartItemData, GetDataAccount } =
@@ -16,15 +16,13 @@ const DetailAccountScreen = (props) => {
 
   if (!accoutData)
     return (
-      <div className="d-flex justify-content-center">
-        <button className="btn btn-primary" type="button" disabled>
-          <span
-            className="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          กำลังโหลด...
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <img src="../../../../assets/img/isloading.gif" alt="Loading" />
       </div>
     );
 

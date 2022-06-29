@@ -17,6 +17,20 @@ export const GetProducts = async ({
   }
 };
 
+export const GetForExcel = async (token) => {
+  try {
+    let url = "apiproducts/GetForExcel";
+    var config = {
+      headers: { Authorization: "Bearer " + token },
+    };
+    var response = await API.get(url, config);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
 export const GetById = async (id) => {
   try {
     let url = "apiproducts/GetById/" + id;

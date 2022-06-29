@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
+import useDetailManageStock from "../../../logic/private/ManageStock/useDetailManageStock";
 import * as functionService from "../../../helper/functionService";
-import { IsCheckToken } from "../../../services/account.service";
-import { GetById } from "../../../services/manageStock.service";
 
 const DetailManageStock = (props) => {
-  const navigation = useNavigate();
-  const { id } = useParams();
-  const [data, setData] = useState();
+  const { navigation, id, data, GetManageStockById } = useDetailManageStock();
 
   useEffect(() => {
     if (id) GetManageStockById();
     else navigation(-1);
   }, []);
-
-  const GetManageStockById = async () => {
-    var token = localStorage.getItem("token");
-    var isToken = await IsCheckToken(token);
-    if (isToken) {
-      var response = await GetById(id, token);
-      if (response.statusCode === 200) setData(response.data);
-      else console.log(response.message);
-    }
-  };
 
   const BuildMangeItem = () => {
     if (data && data.manageItem)
@@ -65,7 +52,17 @@ const DetailManageStock = (props) => {
       ));
   };
 
-  if (!data) return <></>;
+  if (!data)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <img src="../../../../assets/img/isloading.gif" alt="Loading" />
+      </div>
+    );
   return (
     <main>
       <div className="container-fluid px-4">

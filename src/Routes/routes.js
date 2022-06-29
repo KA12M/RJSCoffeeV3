@@ -13,7 +13,7 @@ import DetailManageStock from "../views/private/ManageStock/DetailManageStock";
 import DetailAccountScreen from "../views/private/Accounts/DetailAccountScreen";
 import MainOrderScreen from "../views/private/Orders/MainOrderScreen";
 import DetailOrderScreen from "../views/private/Orders/DetailOrderScreen";
-
+ 
 import Page401 from "../views/401";
 
 export const RouteList = [

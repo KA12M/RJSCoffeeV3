@@ -1,4 +1,4 @@
-import * as constants from "../Constants";
+import * as constants from "../constants/redux";
 
 const initialState = {
   pagination: {
@@ -13,7 +13,7 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case constants.PRODUCT_SET_PAGINATION:
-      return { ...state , pagination: payload };
+      return { ...state, pagination: payload };
 
     default:
       return state;

@@ -1,43 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik } from "formik";
-import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; 
-import * as actionAccounts from "../actions/account.action";
-import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
-import * as accountService from "../services/account.service";
+import useLogin from "../logic/useLogin"; 
 
 const LoginScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const { isLoading, onLogin } = useLogin();
 
-  const onLogin = async (values) => {
-    setIsLoading(true);
-    var res = await accountService.Login(values);
-    setIsLoading(false);
-    if (res.statusCode === 200) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: res.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      getAccountData(res.token);
-    } else
-      Swal.fire({
-        icon: "error",
-        text: res.message,
-      });
-  };
-  const getAccountData = async (token) => {
-    const response = await accountService.GetByToken(token);
-    if (response.statusCode === 200) {
-      dispatch(actionAccounts.setUser(response.data));
-      dispatch(actionAccounts.setToken(token));
-      localStorage.setItem("token", token);
-    } else alert(response.message);
-  };
   return (
     <Formik
       initialValues={{ username: "", password: "" }}
@@ -132,7 +101,7 @@ const LoginScreen = () => {
                         </div>
                         <div className="card-footer text-center py-3">
                           <div className="small">
-                            <Link to="/register">
+                            <Link to="Register">
                               ต้องการบัญชีผู้ใช้? สมัครสมาชิก!
                             </Link>
                           </div>

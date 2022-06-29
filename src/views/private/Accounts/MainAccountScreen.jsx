@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 
+import ReactToPrint from "react-to-print";
+import ReactToPdf from "react-to-pdf";
+
 import Pageination from "../../../components/Pagination";
 import * as functionService from "../../../helper/functionService";
-import useMainAccount from "./useMainAccount";
+import useMainAccount from "../../../logic/private/Accounts/useMainAccount";
 
 const MainAccountScreen = (props) => {
+  const ref = React.useRef();
   const {
-    data,
+    ข้อมูล,
     navigation,
     pagination,
     search,
@@ -15,6 +19,7 @@ const MainAccountScreen = (props) => {
     onChangeCurrentPage,
     onChangePageSize,
     onDeleteAccount,
+    handleExportExcel,
   } = useMainAccount();
 
   useEffect(() => {
@@ -22,8 +27,8 @@ const MainAccountScreen = (props) => {
   }, []);
 
   const BuildColumn = () => {
-    if (data)
-      return data.map((item, index) => (
+    if (ข้อมูล)
+      return ข้อมูล.map((item, index) => (
         <tr key={index}>
           <td className="text-center">
             <img
@@ -126,7 +131,30 @@ const MainAccountScreen = (props) => {
             </form>
           </div>
         </div>
-        <div className="card mb-4">
+        <div className="mb-2 row">
+          <div className="btn-group">
+            <button className="btn btn-success" onClick={handleExportExcel}>
+              <i className="fa-solid fa-file-excel"></i> Excel
+            </button>
+            <ReactToPdf targetRef={ref} filename="account_data.pdf">
+              {({ toPdf }) => (
+                <button className="btn btn-danger" onClick={toPdf}>
+                  <i className="fa-solid fa-file-pdf"></i> Pdf
+                </button>
+              )}
+            </ReactToPdf>
+
+            <ReactToPrint
+              trigger={() => (
+                <button className="btn btn-primary">
+                  <i className="fa-solid fa-print"></i> printing
+                </button>
+              )}
+              content={() => ref.current}
+            />
+          </div>
+        </div>
+        <div className="card mb-4" ref={ref}>
           <div className="card-header">
             <i className="fas fa-table me-1"></i>
             ตารางข้อมูลผู้ใช้
@@ -138,7 +166,7 @@ const MainAccountScreen = (props) => {
                   <th className="col-md-1 text-center">บัญชีผู้ใช้</th>
                   <th className="col-md-2 text-center">ชื่อ</th>
                   <th className="col-md-2 text-center">ชื่อผู้ใข้งาน</th>
-                  <th className="col-md-1 text-center">สถานะ</th>
+                  <th className="col-md-2 text-center">สถานะ</th>
                   <th className="col-md-2 text-center">วันที่เข้าสู่ระบบ</th>
                   <th className="col-md-3 text-center">จัดการ</th>
                 </tr>
@@ -148,7 +176,7 @@ const MainAccountScreen = (props) => {
               </tbody>
             </table>
 
-            {!data && (
+            {!ข้อมูล && (
               <div className="d-flex justify-content-center">
                 <button className="btn btn-primary" type="button" disabled>
                   <span

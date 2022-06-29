@@ -1,4 +1,12 @@
 import React, { useEffect, useState } from "react";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
+const queryClient = new QueryClient();
 
 // Redux SetUp
 import { Provider, useDispatch } from "react-redux";
@@ -6,7 +14,7 @@ import { applyMiddleware, legacy_createStore } from "redux";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
 import reducers from "./reducers";
-const store = legacy_createStore(reducers, applyMiddleware(thunk, logger));
+const store = legacy_createStore(reducers, applyMiddleware(thunk, ));
 // End Redux SetUp
 
 import * as manageStockService from "./services/manageStock.service";
@@ -48,14 +56,16 @@ const App = () => {
           justifyContent: "center",
         }}
       >
-        <img src="src/isloading.gif" alt="Loading" />
+        <img src="assets/img/isloading.gif" alt="Loading" />
       </div>
     );
   return <ManageRoute />;
 };
 
 export default () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </QueryClientProvider>
 );

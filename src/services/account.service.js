@@ -1,6 +1,6 @@
 import API from "../helper/axios";
 
-export const GetByToken = async token => {
+export const GetByToken = async (token) => {
   try {
     let url = "apiaccounts/GetByToken";
     var config = {
@@ -14,9 +14,9 @@ export const GetByToken = async token => {
   }
 };
 
-export const GetByCraeteDateLast = async (num,token) => {
+export const GetForExcel = async (token) => {
   try {
-    let url = "ApiAccounts/GetByCreateDateLast?num="+num;
+    let url = "apiaccounts/getforexcel";
     var config = {
       headers: { Authorization: "Bearer " + token },
     };
@@ -28,10 +28,24 @@ export const GetByCraeteDateLast = async (num,token) => {
   }
 };
 
-export const IsCheckToken = async (token) => { 
+export const GetByCraeteDateLast = async (num, token) => {
+  try {
+    let url = "ApiAccounts/GetByCreateDateLast?num=" + num;
+    var config = {
+      headers: { Authorization: "Bearer " + token },
+    };
+    var response = await API.get(url, config);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
+export const IsCheckToken = async (token) => {
   var response = await GetByToken(token);
   if (response.statusCode == 200) return true;
-  else if (response.response.status == 401)  return false; 
+  else if (response.response.status == 401) return false;
   else return false;
 };
 
@@ -55,7 +69,7 @@ export const Register = async (values, upfiles) => {
     formData.append("username", values.username);
     formData.append("password", values.password);
     formData.append("name", values.name);
-    formData.append("roleId", 2);
+    formData.append("roleId", 1);
     if (upfiles) formData.append("profileImage", upfiles);
     var response = await API.post(url, formData);
     return response.data;

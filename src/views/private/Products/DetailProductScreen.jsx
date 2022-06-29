@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-import * as productService from "../../../services/product.service";
+import useDetailProduct from "../../../logic/private/Products/useDetailProduct";
 import * as functionService from "../../../helper/functionService";
 
 const DetailProductScreen = (props) => {
-  const { id } = useParams();
-  const navigation = useNavigate();
-  const [data, setData] = useState();
+  const { id, navigation, data, GetProductDetail } = useDetailProduct();
 
   useEffect(() => {
     if (id) GetProductDetail();
     else navigation(-1);
     functionService.ScrollToTop();
   }, [id]);
-
-  const GetProductDetail = async () => {
-    var response = await productService.GetById(id);
-    if (response.statusCode == 200) setData(response.data);
-    else console.log(response.message);
-  };
 
   const BuildGallery = () => {
     return (
@@ -119,7 +111,7 @@ const DetailProductScreen = (props) => {
           justifyContent: "center",
         }}
       >
-        <img src="/src/isloading.gif" alt="Loading" />
+        <img src="../../../../assets/img/isloading.gif" alt="Loading" />
       </div>
     );
   return (

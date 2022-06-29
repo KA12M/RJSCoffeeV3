@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
+import * as XLSX from "xlsx";
 
 import * as orderActions from "../../../actions/order.action";
 import * as accountActions from "../../../actions/account.action";
 
+import * as functionService from "../../../helper/functionService";
 import * as orderService from "../../../services/order.service";
-import { IsCheckToken } from "./../../../services/account.service";
+import { IsCheckToken } from "../../../services/account.service";
 
 const UseMainOrder = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const UseMainOrder = () => {
 
   const onChangePageSize = async (pageSize) => {
     pagination.pageSize = pageSize;
+    pagination.currentPage = 1;
     dispatch(orderActions.setPagination({ ...pagination, pageSize: pageSize }));
     GetOrders();
   };
@@ -41,7 +44,41 @@ const UseMainOrder = () => {
     GetOrders();
   };
 
-  return { GetOrders, data, pagination, onChangePageSize,onChangeCurrentPage };
+  const handleExportExcel = async () => {
+    var token = localStorage.getItem("token");
+    var isToken = await IsCheckToken(token);
+    if (isToken) {
+      var response = await orderService.GetForExcel(token);
+      if (response.statusCode == 200) {
+        var emp_data = response.data.map((item, i) => {
+          item.status = functionService.OrderStatusFilter(item.status);
+          item.createDate = functionService.Dateformat(item.createDate);
+          item.orderItem = JSON.stringify([
+            ...item.orderItem.map(
+              (gg, i) =>
+                `${i + 1}) ${gg.productName},${gg.productPrice}, x${
+                  gg.amount
+                } ${gg.sumAmountPrice}`
+            ),
+          ]);
+          return item;
+        });
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.json_to_sheet(emp_data);
+        XLSX.utils.book_append_sheet(wb, ws, "order_data");
+        XLSX.writeFile(wb, "order_data.xlsx");
+      }
+    }
+  };
+
+  return {
+    GetOrders,
+    data,
+    pagination,
+    onChangePageSize,
+    onChangeCurrentPage,
+    handleExportExcel,
+  };
 };
 
 export default UseMainOrder;

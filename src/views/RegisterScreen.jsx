@@ -1,39 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Formik } from "formik";
-import { Register } from "../services/account.service";
-import Swal from "sweetalert2";
+
+import useRegister from "../logic/useRegister";
 
 const RegisterScreen = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigate();
+  const { isLoading, onRegister, navigation } = useRegister();
 
-  const onRegister = async (values) => {
-    setIsLoading(true);
-    var response = await Register(values);
-    setIsLoading(false);
-    if (response.statusCode == 200) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: response.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      navigation("/");
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: response.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else
-      Swal.fire({
-        icon: "error",
-        title: response.message,
-      });
-  };
   return (
     <Formik
       initialValues={{

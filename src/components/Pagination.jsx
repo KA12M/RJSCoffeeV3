@@ -109,7 +109,7 @@ export default function Pagination({
                 prevPage();
               }}
             >
-              ย้อนกลับ
+              <i className="fa-solid fa-arrow-left-long"></i>
             </button>
           </li>
           {items}
@@ -125,7 +125,7 @@ export default function Pagination({
                 nextPage();
               }}
             >
-              ต่อไป
+              <i className="fa-solid fa-arrow-right"></i>
             </button>
             <div className="btn-group" role="group">
               <button

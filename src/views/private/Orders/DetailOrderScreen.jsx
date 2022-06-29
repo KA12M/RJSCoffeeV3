@@ -1,11 +1,31 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import useDetailOrder from "./useDetailOrder";
+import useDetailOrder from "../../../logic/private/Orders/useDetailOrder";
 import * as functionService from "../../../helper/functionService";
+import { Formik } from "formik";
 
 const DetailOrderScreen = (props) => {
-  const { data, GetOrderDetail } = useDetailOrder();
+  const {
+    data,
+    GetOrderDetail,
+    handleConfirmPayment,
+    idIsUpdate,
+    setIdIsUpdate,
+    isUpdate,
+    setIsUpdate,
+    handleUpdatePayment,
+    jsonTransportationStatus,
+    setIndexUpdateTransportation,
+    isFormTransportation,
+    setIsFormTransportation,
+    status,
+    setStatus,
+    detail,
+    setDetail,
+    handleSubmitFormTransportation,
+    handleDeleteTransportation,
+  } = useDetailOrder();
 
   useEffect(() => {
     GetOrderDetail();
@@ -62,7 +82,9 @@ const DetailOrderScreen = (props) => {
           {address.province} {address.zipcode}
         </p>
         <p className="card-text">
-          <small className="text-muted">เบอร์โทรศัพท์: {address.telephone}</small>
+          <small className="text-muted">
+            เบอร์โทรศัพท์: {address.telephone}
+          </small>
         </p>
       </div>
     );
@@ -112,7 +134,10 @@ const DetailOrderScreen = (props) => {
           aria-expanded="false"
           aria-controls="payment"
         >
-          การชำระเงิน
+          <span>การชำระเงิน</span>
+          <span style={{ marginLeft: 10 }} className="badge btn btn-primary">
+            {data.payment && data.payment.length}
+          </span>
         </button>
       </h2>
       <div
@@ -122,7 +147,83 @@ const DetailOrderScreen = (props) => {
         data-bs-parent="#accordionFlushExample"
       >
         <div className="accordion-body">
-          {data.payment ? "" : "ยังไม่มีการชำระเงินจากลูกค้า"}
+          {!data.payment && "ยังไม่มีการชำระเงินจากลูกค้า"}
+          {data.payment && (
+            <div className="table-responsive">
+              {data.status === "2" && (
+                <div className="d-flex flex-row-reverse">
+                  <button
+                    className="btn btn-primary m-2"
+                    type="button"
+                    onClick={handleConfirmPayment}
+                  >
+                    ยืนยันการชำระเงิน
+                  </button>
+                </div>
+              )}
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th className="text-center col-1" scope="col">
+                      ใบเสร็จ
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      วันที่
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      สถานะ
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      รายละเอียด
+                    </th>
+                    {data.status === "2" && (
+                      <th className="text-center col-1" scope="col">
+                        จัดการ
+                      </th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.payment.map((item, index) => (
+                    <tr key={index}>
+                      <td className="text-center">
+                        <img
+                          style={{
+                            height: 140,
+                            width: 140,
+                            objectFit: "cover",
+                          }}
+                          src={item.imgPay}
+                          alt=""
+                        />
+                      </td>
+                      <td className="text-center">
+                        {functionService.timeSince(item.createdate)}{" "}
+                        {functionService.Dateformat(item.createdate)}
+                      </td>
+                      <td className="text-center">{item.status}</td>
+                      <td className="text-center">{item.detail}</td>
+                      {data.status === "2" && (
+                        <td className="text-center">
+                          <button
+                            type="button"
+                            className="btn btn-warning"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setIsUpdate(true);
+                              setIdIsUpdate(index);
+                            }}
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -139,7 +240,10 @@ const DetailOrderScreen = (props) => {
           aria-expanded="false"
           aria-controls="flush-collapseTwo"
         >
-          การจัดส่งสินค้า
+          <span>การจัดส่งสินค้า</span>
+          <span style={{ marginLeft: 10 }} className="badge btn btn-warning">
+            {data.transportation && data.transportation.length}
+          </span>
         </button>
       </h2>
       <div
@@ -148,7 +252,84 @@ const DetailOrderScreen = (props) => {
         aria-labelledby="flush-headingTwo"
         data-bs-parent="#accordionFlushExample"
       >
-        <div className="accordion-body">ยังไม่การจัดส่งสินค้า</div>
+        <div className="accordion-body">
+          {data.status != "3" && "ยังไม่การจัดส่งสินค้า"}
+          {data.status != "1" && data.status != "2" && data.status != "0" ? (
+            <div className="table-responsive">
+              <div className="d-flex flex-row-reverse">
+                <button
+                  className="btn btn-success m-2"
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsFormTransportation(true);
+                  }}
+                >
+                  เพิ่มการขนส่ง
+                </button>
+              </div>
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th className="text-center col-1" scope="col">
+                      วันที่
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      สถานะ
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      รายละเอียด
+                    </th>
+                    <th className="text-center col-2" scope="col">
+                      จัดการ
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.transportation &&
+                    data.transportation.map((item, index) => (
+                      <tr key={index}>
+                        <td className="text-center">
+                          {functionService.timeSince(item.date)}{" "}
+                          {functionService.Dateformat(item.date)}
+                        </td>
+                        <td className="text-center">{item.status}</td>
+                        <td className="text-center">{item.detail}</td>
+                        <td className="text-center">
+                          <div className="btn-group">
+                            <button
+                              type="button"
+                              className="btn btn-warning"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setIsFormTransportation(true);
+                                setIndexUpdateTransportation(index);
+                                setStatus(data.transportation[index].status);
+                                setDetail(data.transportation[index].detail);
+                              }}
+                            >
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-danger"
+                              onClick={() =>
+                                handleDeleteTransportation(item.id)
+                              }
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
@@ -161,7 +342,7 @@ const DetailOrderScreen = (props) => {
           justifyContent: "center",
         }}
       >
-        <img src="/src/isloading.gif" alt="Loading" />
+        <img src="../../../../assets/img/isloading.gif" alt="Loading" />
       </div>
     );
   }
@@ -237,7 +418,7 @@ const DetailOrderScreen = (props) => {
               </div>
             </div>
 
-            <div className="col mb-4">
+            <div className="col-md-6">
               <div className="card text-center">
                 <div
                   className="accordion accordion-flush"
@@ -249,6 +430,142 @@ const DetailOrderScreen = (props) => {
                 </div>
               </div>
             </div>
+
+            {isUpdate && idIsUpdate != null ? (
+              <div className="col-md-6 mt-2">
+                <div className="card p-4">
+                  <span>
+                    {functionService.timeSince(
+                      data.payment[idIsUpdate].createdate
+                    )}{" "}
+                    {functionService.Dateformat(
+                      data.payment[idIsUpdate].createdate
+                    )}
+                  </span>
+                  <img
+                    style={{
+                      height: 280,
+                      width: 280,
+                      objectFit: "cover",
+                    }}
+                    src={data.payment[idIsUpdate].imgPay}
+                    alt=""
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {isUpdate && idIsUpdate != null ? (
+              <Formik
+                enableReinitialize
+                initialValues={{
+                  status: idIsUpdate ? data.payment[idIsUpdate].status : "",
+                  detail: idIsUpdate ? data.payment[idIsUpdate].detail : "",
+                }}
+                onSubmit={(values) => {
+                  if (values.status != "" && values.detail != "")
+                    handleUpdatePayment({
+                      ...data.payment[idIsUpdate],
+                      ...values,
+                    });
+                }}
+              >
+                {({ values, handleSubmit, handleChange }) => (
+                  <div className="col-md-6 mt-2">
+                    <form onSubmit={handleSubmit} className="card p-4">
+                      <div className="mb-3">
+                        <label className="form-label">สถานะ</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="status"
+                          value={values.status}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label className="form-label">รายละเอียด</label>
+                        <textarea
+                          className="form-control"
+                          rows="3"
+                          name="detail"
+                          value={values.detail}
+                          onChange={handleChange}
+                        ></textarea>
+                      </div>
+                      <button className="btn btn-success" type="submit">
+                        บันทึก
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </Formik>
+            ) : (
+              ""
+            )}
+
+            {isFormTransportation && (
+              <div className="col-md-6 mt-2">
+                <div className="card p-4" style={{ alignItems: "center" }}>
+                  <img
+                    style={{
+                      width: "57.3%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    src="https://www.kindpng.com/picc/m/182-1828684_van-truck-transport-vehicle-comments-shipping-icon-png.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            )}
+
+            {isFormTransportation && (
+              <div className="col-md-6 mt-2">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmitFormTransportation();
+                  }}
+                  className="card p-4"
+                >
+                  <div className="mb-3">
+                    <label className="form-label">สถานะ</label>
+                    <select
+                      className="form-select"
+                      name="status"
+                      values={status}
+                      defaultValue={status}
+                      onChange={(e) => {
+                        e.preventDefault();
+                        setStatus(e.target.value);
+                      }}
+                    >
+                      <option value="">กรุณาเลือกสถานะ</option>
+                      {jsonTransportationStatus.map((item) => (
+                        <option key={item.id} value={item.NameTH}>
+                          {item.NameTH}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">รายละเอียด</label>
+                    <textarea
+                      className="form-control"
+                      rows="4"
+                      name="detail"
+                      value={detail}
+                      onChange={(e) => setDetail(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <button className="btn btn-success" type="submit">
+                    บันทึก
+                  </button>
+                </form>
+              </div>
+            )}
           </div>
         </div>
       </div>
